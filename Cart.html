@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cart - Glow Beauty</title>
+  <link rel="stylesheet" href="Cart.css" />
+</head>
+<body>
+  <div class="page-wrapper">
+  <header>
+    <h1>Glow Beauty</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="shop.html">Shop</a>
+      <a href="cart.html">Cart</a>
+      <a href="aboutus.html">About Us</a>
+    </nav>
+  </header>
+
+  <h1 class="main-title">Your Cart</h1>
+  <section class="shop-section" id="cart-container">
+    <!-- Products will be inserted here -->
+  </section>
+
+  <script>
+  let cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+  const container = document.getElementById('cart-container');
+
+  function renderCart() {
+    container.innerHTML = ''; // Clear the container
+
+    if (cartItems.length === 0) {
+      container.innerHTML = "<h2>Your cart is empty.</h2>";
+      return;
+    }
+
+    cartItems.forEach((item, index) => {
+      const productCard = document.createElement('div');
+      productCard.classList.add('product-card');
+      productCard.innerHTML = `
+        <img src="${item.imageSrc}" alt="${item.title}">
+        <h3>${item.title}</h3>
+        <p>${item.price}</p>
+        <button class="remove-btn" data-index="${index}">Remove</button>
+      `;
+      container.appendChild(productCard);
+    });
+
+    // Add event listeners for Remove buttons
+    document.querySelectorAll('.remove-btn').forEach(button => {
+      button.addEventListener('click', function () {
+        const index = this.getAttribute('data-index');
+        cartItems.splice(index, 1); // Remove item from array
+        localStorage.setItem('cart', JSON.stringify(cartItems)); // Update localStorage
+        renderCart(); // Re-render
+      });
+    });
+  }
+
+  // Initial render
+  renderCart();
+</script>
+
+
+  <footer>
+    <div class="container">
+      <p>@ 2025 DIVYA Glow Beauty COSMETICS. ALL RIGHTS RESERVED</p>
+    </div>
+  </footer>
+  </div>
+</body>
+</html>
